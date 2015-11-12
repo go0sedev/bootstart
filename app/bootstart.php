@@ -120,7 +120,7 @@ class Bootstart
      * @throws \Exception When the view is not found
      */
     static public function render($name, $data = [],
-                                  $template = 'templates/visitor')
+                                  $template = 'templates/default')
     {
         # In order to match naming convention, lowercase the name
         $body = dirname(__DIR__).'/app/views/'.strtolower($name).'.php';
