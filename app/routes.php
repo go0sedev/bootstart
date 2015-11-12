@@ -23,21 +23,6 @@ if (strstr($request_uri, "/") !== false) {
 
 # Decide which route should handle the request
 switch ($request_uri) {
-    case 'auth':
-        return 'AuthController@signin';
-        break;
-    case 'signout':
-        return 'AuthController@signout';
-        break;
-    case 'create':
-        return 'IssueController@create';
-        break;
-    case 'issue':
-        return 'IssueController@show';
-        break;
-    case 'issues':
-        return 'IssueController@issues';
-        break;
     default:
         return 'HomeController@home';
         break;
