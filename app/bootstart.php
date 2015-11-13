@@ -93,8 +93,31 @@ class Bootstart
      */
     public function handle()
     {
-        # Include the routes file
+        # Setup Routing
         $parameters = [];
+        
+        # Get and prepare the request uri
+        $request_uri = trim(str_replace(PUBLIC_PATH, "", $_SERVER['REQUEST_URI']) ,"/");
+
+        # Strip away query parameters
+        if (strstr($request_uri, "?") !== false) {
+            $request_uri = substr($request_uri, 0, strpos($request_uri, "?"));
+        };
+
+        # Handle SEO friendly URL's
+        if (strstr($request_uri, "/") !== false) {
+            $count = 0;
+            foreach (explode("/", $request_uri) as $param) {
+                $count++;
+                if ($count === 1) {
+                    $request_uri = $param;
+                } else {
+                    $parameters[] = $param;
+                }
+            }
+        };
+
+        # Include the routes file
         $handler = require 'routes.php';
 
         # Extract the controller and method names from the route
@@ -143,7 +166,7 @@ class Bootstart
     }
 
     /**
-     * This function returns the html viewwithout a template
+     * This function returns the html view without a template
      * @param string $name The name of the view
      * @param array $data Additional variables to be replaced in the content
      * @return string The Html code from the view
@@ -151,6 +174,9 @@ class Bootstart
      */
     static public function view($name, $data = [])
     {
+        # Trim .php from file name, if it was accidentally added by the developer
+        $name = trim($name, ".php");
+
         # In order to match naming convention, lowercase the name
         $body = dirname(__DIR__).'/app/views/'.strtolower($name).'.php';
 
